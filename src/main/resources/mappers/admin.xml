@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.projectnmt.dutyalram.repository.AdminMapper">
+
+    <resultMap id="UserResultMap" type="com.projectnmt.dutyalram.entity.User">
+        <id property="userId" column="user_id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="name" column="name" />
+        <result property="phoneNumber" column="phone_number" />
+        <result property="email" column="email" />
+        <result property="gender" column="gender" />
+        <result property="age" column="age" />
+        <result property="profileImg" column="profile_img" />
+        <collection property="roleRegisters" javaType="list" resultMap="RoleRegisterResultMap"/>
+    </resultMap>
+    <resultMap id="AdminUserResultMap" type="com.projectnmt.dutyalram.entity.AdminUser">
+        <id property="userId" column="user_id" />
+        <result property="username" column="username" />
+        <result property="password" column="password" />
+        <result property="name" column="name" />
+        <result property="phoneNumber" column="phone_number" />
+        <result property="email" column="email" />
+        <result property="gender" column="gender" />
+        <result property="age" column="age" />
+        <result property="profileImg" column="profile_img" />
+        <collection property="role" javaType="list" resultMap="RoleResultMap"/>
+    </resultMap>
+
+    <resultMap id="RoleRegisterResultMap" type="com.projectnmt.dutyalram.entity.Authority">
+        <id property="roleRegisterId" column="user_register_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="roleId" column="role_id"/>
+        <association property="role" resultMap="RoleResultMap"/>
+    </resultMap>
+
+    <resultMap id="RoleResultMap" type="com.projectnmt.dutyalram.entity.Role">
+        <id property="roleId" column="role_id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="roleNameKor" column="role_name_kor"/>
+    </resultMap>
+    <resultMap id="CommentResultMap" type="com.projectnmt.dutyalram.entity.DonationComment">
+        <id property="donationPageId" column="donation_page_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="donationPageId" column="donation_page_id"/>
+        <result property="commentText" column="comment_text" />
+    </resultMap>
+    <resultMap id="DonationPageResultMap" type="com.projectnmt.dutyalram.entity.DonationPage"   >
+        <id property="donationPageId" column="donation_page_id" />
+        <result property="teamId" column="team_id" />
+        <result property="mainCategoryId" column="main_category_id" />
+        <result property="createDate" column="create_date" />
+        <result property="endDate" column="end_date" />
+        <result property="goalAmount" column="goal_amount" />
+        <result property="storyTitle" column="story_title" />
+        <result property="storyContent" column="story_content" />
+        <result property="mainImgUrl" column="main_img_url" />
+        <result property="donationTagId" column="donation_tag_id" />
+        <result property="donationPageShow" column="donation_page_show" />
+    </resultMap>
+    <resultMap id="TeamResultMap" type="com.projectnmt.dutyalram.entity.Team">
+        <id property="teamId" column="team_id" />
+        <result property="teamName" column="team_name" />
+        <result property="teamLogoImgUrl" column="team_logo_img_url" />
+        <result property="teamType" column="team_type" />
+        <result property="teamPhoneNumber" column="team_phone" />
+        <result property="teamEmail" column="team_email" />
+        <result property="companyRegisterNumber" column="company_register_number" />
+        <result property="companyRegisterNumberUrl" column="company_register_number_url" />
+        <result property="teamInfoText" column="team_info_text" />
+        <result property="teamHomepage" column="team_homepage" />
+        <result property="teamTypeCategory" column="team_type_category" />
+        <result property="teamTypeCategoryName" column="team_type_category_name" />
+        <collection property="teamMembers" javaType="list" resultMap="teamMemberResultMap" />
+        <collection property="accounts" javaType="list" resultMap="accountResultMap" />
+    </resultMap>
+    <resultMap id="teamMemberResultMap" type="com.projectnmt.dutyalram.entity.TeamMember">
+        <id property="teamMemberId" column="team_member_tb_id"/>
+        <result property="teamId" column="team_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="teamRoleId" column="team_role_id"/>
+    </resultMap>
+    <resultMap id="accountResultMap" type="com.projectnmt.dutyalram.entity.Account">
+        <id property="accountId" column="account_id"/>
+        <result property="teamId" column="team_id"/>
+        <result property="accountUsername" column="account_username"/>
+        <result property="bankName" column="bank_name"/>
+        <result property="accountNumber" column="account_number"/>
+        <result property="accountUrl" column="account_url"/>
+    </resultMap>
+
+    <resultMap id="DonationResultMap" type="com.projectnmt.dutyalram.entity.Donation">
+        <id property="donationPageId" column="donation_page_id" />
+        <result property="teamId" column="team_id" />
+        <result property="mainCategoryId" column="main_category_id" />
+        <result property="storyTitle" column="story_title" />
+        <result property="createDate" column="create_date" />
+        <result property="endDate" column="end_date" />
+        <result property="goalAmount" column="goal_amount" />
+        <result property="mainImgUrl" column="main_img_url" />
+        <result property="donationTagId" column="donation_tag_id" />
+        <result property="donationPageShow" column="donation_page_show" />
+        <association property="team" resultMap="TeamResultMap" />
+        <association property="mainCategory" resultMap="MainCategoryResultMap" />
+        <association property="donationTag" resultMap="DonationTagResultMap" />
+    </resultMap>
+    <resultMap id="MainCategoryResultMap" type="com.projectnmt.dutyalram.entity.MainCategory">
+        <id property="mainCategoryId" column="main_category_id"/>
+        <result property="mainCategoryName" column="main_category_name"/>
+    </resultMap>
+    <resultMap id="DonationTagResultMap" type="com.projectnmt.dutyalram.entity.DonationTag">
+        <id property="donationTagId" column="donation_tag_id"/>
+        <result property="donationTagName" column="donation_tag_name"/>
+    </resultMap>
+
+    <insert id="addRole">
+        insert into authority_tb
+        values(0, #{userId}, #{roleId});
+    </insert>
+    <insert id="sendMessage">
+        insert into message_tb
+        values(0, #{isTeam}, #{senderId}, #{userId}, #{message}, now());
+    </insert>
+    <update id="updatePageShow">
+        UPDATE
+            donation_page_tb
+        SET
+            donation_page_show = 1
+        WHERE
+            donation_page_id = #{donationPageId}
+    </update>
+    <delete id="deleteCommemt">
+        delete
+        from
+            donation_comment_tb
+        where
+        donation_comment_id = #{donationCommentId}
+    </delete>
+    <delete id="deleteTeamListByTeamIds">
+        delete
+        from
+            team_tb
+        where
+            team_id = #{teamId}
+    </delete>
+    <delete id="deleteReport">
+        delete
+        from
+            report_tb
+        where
+            comment_id = #{donationCommentId}
+            and is_donation = 1
+    </delete>
+
+    <select id="findUserList" resultMap="AdminUserResultMap">
+        select
+            ut.user_id,
+            ut.username,
+            ut.password,
+            ut.name,
+            ut.phone_number,
+            ut.email,
+            ut.gender,
+            ut.age,
+            ut.profile_img
+        from
+            user_tb ut
+        where
+            1 = 1
+            <choose>
+                <when test="selectedTextOption == 0">
+                    and (
+                        ut.user_id = #{searchText}
+                        or  ut.username like concat('%', #{searchText}, '%')
+                        or  ut.name like concat('%', #{searchText}, '%')
+                        or  ut.phone_number like concat('%', #{searchText}, '%')
+                        or  ut.email like concat('%', #{searchText}, '%')
+                    )
+                </when>
+                <when test="selectedTextOption == 1">
+                    and ut.user_id = #{searchText}
+                </when>
+                <when test="selectedTextOption == 2">
+                    and ut.username like concat('%', #{searchText}, '%')
+                </when>
+                <when test="selectedTextOption == 3">
+                    and ut.name like concat('%', #{searchText}, '%')
+                </when>
+                <when test="selectedTextOption == 4">
+                    and ut.phone_number like concat('%', #{searchText}, '%')
+                </when>
+                <when test="selectedTextOption == 5">
+                    and ut.email like concat('%', #{searchText}, '%')
+                </when>
+            </choose>
+            limit #{pageNumber}, #{searchCount}
+    </select>
+
+    <select id="getUserCount" resultType="integer">
+        select
+            count(*)
+        from
+            user_tb ut
+        where
+            1 = 1
+        <choose>
+            <when test="selectedTextOption == 0">
+                and (
+                ut.user_id = #{searchText}
+                or  ut.username like concat('%', #{searchText}, '%')
+                or  ut.name like concat('%', #{searchText}, '%')
+                or  ut.phone_number like concat('%', #{searchText}, '%')
+                or  ut.email like concat('%', #{searchText}, '%')
+                )
+            </when>
+            <when test="selectedTextOption == 1">
+                and ut.user_id = #{searchText}
+            </when>
+            <when test="selectedTextOption == 2">
+                and ut.username like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedTextOption == 3">
+                and ut.name like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedTextOption == 4">
+                and ut.phone_number like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedTextOption == 5">
+                and ut.email like concat('%', #{searchText}, '%')
+            </when>
+        </choose>
+    </select>
+
+    <select id="findUserListForRoleSelect" resultMap="AdminUserResultMap">
+        select
+            ut.user_id,
+            ut.username,
+            ut.password,
+            ut.name,
+            ut.phone_number,
+            ut.email,
+            ut.gender,
+            ut.age,
+            ut.profile_img,
+            aut.role_id,
+            rt.role_name,
+            rt.role_name_kor
+        from
+            user_tb ut
+            left outer join authority_tb aut on(aut.user_id = ut.user_id)
+            left outer join role_tb rt on(rt.role_id = aut.role_id)
+        where
+            1 = 1
+        <if test="selectedRoleoption != 0">
+            and aut.role_id = #{selectedRoleoption}
+        </if>
+        <choose>
+            <when test="selectedTextOption == 0">
+                and (
+                ut.user_id = #{searchText}
+                or  ut.username like concat('%', #{searchText}, '%')
+                or  ut.name like concat('%', #{searchText}, '%')
+                or  ut.phone_number like concat('%', #{searchText}, '%')
+                or  ut.email like concat('%', #{searchText}, '%')
+                )
+            </when>
+            <when test="selectedTextOption == 1">
+                and ut.user_id = #{searchText}
+            </when>
+            <when test="selectedTextOption == 2">
+                and ut.username like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedTextOption == 3">
+                and ut.name like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedTextOption == 4">
+                and ut.phone_number like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedTextOption == 5">
+                and ut.email like concat('%', #{searchText}, '%')
+            </when>
+        </choose>
+    </select>
+    <select id="findUserByUserId" resultMap="AdminUserResultMap">
+        select
+            ut.user_id,
+            ut.username,
+            ut.password,
+            ut.name,
+            ut.phone_number,
+            ut.email,
+            ut.gender,
+            ut.age,
+            ut.profile_img,
+            rt.role_id,
+            rt.role_name,
+            rt.role_name_kor
+        from
+            user_tb ut
+            left outer join authority_tb aut on(aut.user_id = ut.user_id)
+            left outer join role_tb rt on(rt.role_id = aut.role_id)
+        where
+            ut.user_id = #{user_id};
+    </select>
+    <select id="findCommentListByUserId" resultType="com.projectnmt.dutyalram.dto.resp.CommentListRespDto">
+        select
+            ct.donation_comment_id as donationCommentId,
+            ct.comment_text as commentText,
+            dpt.story_title as storyTitle,
+            dpt.donation_page_id as donationPageId,
+            count(rt.comment_id) as reportCount
+        from
+            donation_comment_tb ct
+            left outer join donation_page_tb dpt on (dpt.donation_page_id = ct.donation_page_id)
+            left outer join report_tb rt on (rt.comment_id = ct.donation_comment_id)
+        where
+            1 = 1
+            <if test="userId != 0">
+                and ct.user_id = #{userId}
+            </if>
+        GROUP BY
+            ct.donation_comment_id, ct.comment_text, dpt.story_title, dpt.donation_page_id
+    </select>
+    <select id="getTeamList" resultMap="TeamResultMap" resultType="list">
+        select
+            tt.team_id,
+            tt.team_name,
+            tt.team_type,
+            tt.team_phone,
+            tt.team_email,
+            tt.company_register_number,
+            tt.company_register_number_url,
+            tt.team_info_text,
+            tt.team_homepage,
+            tt.team_logo_img_url,
+            tt.team_type_category,
+            ttct.team_type_category_name
+        from
+            team_tb tt
+            left outer join team_type_category_tb ttct on(ttct.team_type_category_id = tt.team_type_category)
+        where
+        1 = 1
+        <if test="selectedCategory &lt; 0">
+            and tt.team_type = #{selectedCategory}  * -1
+        </if>
+        <if test="selectedCategory &gt; 0">
+            and tt.team_type_category = #{selectedCategory}
+        </if>
+        <choose>
+            <when test="selectedSearchTextOption == 0">
+                and (
+                tt.team_id = #{searchText}
+                or  tt.team_name like concat('%', #{searchText}, '%')
+                or  tt.company_register_number like concat('%', #{searchText}, '%')
+                or  tt.team_phone like concat('%', #{searchText}, '%')
+                or  tt.team_email like concat('%', #{searchText}, '%')
+                )
+            </when>
+            <when test="selectedSearchTextOption == 1">
+                and tt.team_id = #{searchText}
+            </when>
+            <when test="selectedSearchTextOption == 2">
+                and tt.team_name like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedSearchTextOption == 3">
+                and tt.company_register_number like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedSearchTextOption == 4">
+                and tt.team_email like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedSearchTextOption == 5">
+                and tt.team_phone like concat('%', #{searchText}, '%')
+            </when>
+        </choose>
+        limit #{pageNumber}, #{searchCount}
+    </select>
+    <select id="findTeamMemberListByTeamId" resultMap="teamMemberResultMap">
+        select
+            *
+        from
+            team_member_tb
+        where
+            team_id = #{teamId}
+    </select>
+    <select id="findRoleList" resultMap="RoleResultMap">
+        select
+            *
+        from
+            role_tb rt
+            left outer join authority_tb aut on(aut.role_id = rt.role_id)
+        where
+            aut.user_id = #{user_id}
+    </select>
+    <select id="getDonationList" resultMap="DonationResultMap">
+        SELECT
+            dp.donation_page_id,
+            dp.team_id,
+            dp.main_category_id,
+            dp.story_title,
+            dp.create_date,
+            dp.end_date,
+            dp.goal_amount,
+            dp.main_img_url,
+            dp.donation_tag_id,
+            mc.main_category_name,
+            dt.donation_tag_name,
+            dp.donation_page_show,
+            t.team_name
+        FROM
+            donation_page_tb dp
+            LEFT OUTER JOIN main_category_tb mc ON dp.main_category_id = mc.main_category_id
+            LEFT OUTER JOIN donation_tag_tb dt ON dp.donation_tag_id = dt.donation_tag_id
+            LEFT OUTER JOIN team_tb t ON dp.team_id = t.team_id
+        where
+            1 = 1
+            <if test="teamId != 0">
+                and dp.team_id = #{teamId}
+            </if>
+            <if test="donationIsShow != 0">
+                and donation_page_show = #{donationIsShow}
+            </if>
+            <if test="isTimeOut != 0">
+                and DATEDIFF( end_date, now()) * #{isTimeOut}
+            </if>
+            <choose>
+                <when test="selectedOption == 0">
+                    and (
+                    dp.donation_page_id = #{searchText}
+                    or  dp.story_title like concat('%', #{searchText}, '%')
+                    or  dp.story_content like concat('%', #{searchText}, '%')
+                    or  dt.donation_tag_name like concat('%', #{searchText}, '%')
+                    or  t.team_name like concat('%', #{searchText}, '%')
+                    )
+                </when>
+                <when test="selectedOption == 1">
+                    and dp.donation_page_id = #{searchText}
+                </when>
+                <when test="selectedOption == 2">
+                    and dp.story_title like concat('%', #{searchText}, '%')
+                </when>
+                <when test="selectedOption == 3">
+                    and dp.story_content like concat('%', #{searchText}, '%')
+                </when>
+                <when test="selectedOption == 4">
+                    and dt.donation_tag_name like concat('%', #{searchText}, '%')
+                </when>
+                <when test="selectedOption == 5">
+                    and t.team_name like concat('%', #{searchText}, '%')
+                </when>
+            </choose>
+            limit #{pageId}, #{searchCount}
+    </select>
+    <select id="getTeamCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            team_tb tt
+            left outer join team_member_tb tmt on(tmt.team_id = tt.team_id)
+            left outer join team_type_category_tb ttct on(ttct.team_type_category_id = tt.team_type_category)
+        where
+            1 = 1
+        <if test="selectedCategory &lt; 0">
+            and tt.team_type = #{selectedCategory}  * -1
+        </if>
+        <if test="selectedCategory &gt; 0">
+            and tt.team_type_category = #{selectedCategory}
+        </if>
+        <choose>
+            <when test="selectedSearchTextOption == 0">
+                and (
+                tt.team_id = #{searchText}
+                or  tt.team_name like concat('%', #{searchText}, '%')
+                or  tt.company_register_number like concat('%', #{searchText}, '%')
+                or  tt.team_phone like concat('%', #{searchText}, '%')
+                or  tt.team_email like concat('%', #{searchText}, '%')
+                )
+            </when>
+            <when test="selectedSearchTextOption == 1">
+                and tt.team_id = #{searchText}
+            </when>
+            <when test="selectedSearchTextOption == 2">
+                and tt.team_name like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedSearchTextOption == 3">
+                and tt.company_register_number like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedSearchTextOption == 4">
+                and tt.team_email like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedSearchTextOption == 5">
+                and tt.team_phone like concat('%', #{searchText}, '%')
+            </when>
+        </choose>
+    </select>
+    <select id="getDonationCount" resultType="java.lang.Integer">
+        select
+            count(*)
+        from
+            donation_page_tb dp
+            LEFT OUTER JOIN main_category_tb mc ON dp.main_category_id = mc.main_category_id
+            LEFT OUTER JOIN donation_tag_tb dt ON dp.donation_tag_id = dt.donation_tag_id
+            LEFT OUTER JOIN team_tb t ON dp.team_id = t.team_id
+        where
+            1 = 1
+        <if test="teamId != 0">
+            and dp.team_id = #{teamId}
+        </if>
+        <if test="donationIsShow != 0">
+            and donation_page_show = #{donationIsShow}
+        </if>
+        <if test="isTimeOut != 0">
+            and DATEDIFF( end_date, now()) * #{isTimeOut}
+        </if>
+        <choose>
+            <when test="selectedOption == 0">
+                and (
+                dp.donation_page_id = #{searchText}
+                or  dp.story_title like concat('%', #{searchText}, '%')
+                or  dp.story_content like concat('%', #{searchText}, '%')
+                or  dt.donation_tag_name like concat('%', #{searchText}, '%')
+                or  t.team_name like concat('%', #{searchText}, '%')
+                )
+            </when>
+            <when test="selectedOption == 1">
+                and dp.donation_page_id = #{searchText}
+            </when>
+            <when test="selectedOption == 2">
+                and dp.story_title like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedOption == 3">
+                and dp.story_content like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedOption == 4">
+                and dt.donation_tag_name like concat('%', #{searchText}, '%')
+            </when>
+            <when test="selectedOption == 5">
+                and t.team_name like concat('%', #{searchText}, '%')
+            </when>
+        </choose>
+    </select>
+
+    <delete id="deleteDonation">
+        delete
+        from
+            donation_page_tb
+        where
+        donation_page_id = #{donationPageId}
+    </delete>
+
+    <delete id="deleteCommemtByPageId">
+    delete
+    from
+        donation_comment_tb
+    where
+        donation_page_id = #{donationPageId}
+    </delete>
+    <delete id="deleteLikeByPageId">
+        delete
+        from
+            like_tb
+        where
+            donation_page_id = #{donationPageId}
+    </delete>
+    <delete id="deleteDonationImage">
+        delete
+        from
+            donation_image_tb
+        where
+            donation_page_id = #{donationPageId}
+    </delete>
+</mapper>
